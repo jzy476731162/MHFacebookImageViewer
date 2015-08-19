@@ -88,6 +88,12 @@ static const CGFloat kMinImageScale = 1.0f;
     [_doneButton addTarget:self
                     action:@selector(close:)
           forControlEvents:UIControlEventTouchUpInside];
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setScreenWithDeviceOrientation:) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+}
+
+- (void)setScreenWithDeviceOrientation:(NSNotification *)notification {
+    [self rollbackViewController]; // this will adjust the frame as device orientation changes
 }
 
 - (void)setImageURL:(NSURL *)imageURL defaultImage:(UIImage *)defaultImage imageIndex:(NSInteger)imageIndex {
@@ -430,6 +436,7 @@ static const CGFloat kMinImageScale = 1.0f;
 }
 
 - (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 @end
@@ -549,6 +556,7 @@ static const CGFloat kMinImageScale = 1.0f;
     _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     _tableView.backgroundColor = [UIColor clearColor];
     _tableView.delaysContentTouches = YES;
+    _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setContentOffset:CGPointMake(0, _initialIndex * windowBounds.size.width)];
 
