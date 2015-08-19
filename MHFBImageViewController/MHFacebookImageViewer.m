@@ -507,7 +507,7 @@ static const CGFloat kMinImageScale = 1.0f;
     }
 
     if (self.urlArray) {
-        return self.urlArray[indexPath.row];
+        [imageViewerCell setImageURL:self.urlArray[indexPath.row] defaultImage:self.defaultImage imageIndex:indexPath.row];
     } else if (!self.imageDatasource) {
         // Just to retain the old version
         [imageViewerCell setImageURL:_imageURL defaultImage:self.defaultImage imageIndex:0];
