@@ -42,9 +42,8 @@ static char kImageBrowserKey;
     tapGesture = nil;
 }
 
-- (void)setupImageViewerWithURLArray:(NSArray *)urls withDefaultImage:(UIImage *)image onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
-    self.imageBrowser.urlArray = urls;
-    [self setupImageViewerWithDatasource:nil initialIndex:0 onOpen:open onClose:close];
+- (void)setupImageViewerWithURLArray:(NSArray *)urls withDefaultImage:(UIImage *)defaultImage onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
+    [self setupImageViewerWithDatasource:nil initialIndex:0 withImageArray:urls andDefaultImage:defaultImage onOpen:open onClose:close];
 }
 
 - (void)setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
@@ -52,12 +51,19 @@ static char kImageBrowserKey;
 }
 
 - (void)setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource initialIndex:(NSInteger)initialIndex onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
+    [self setupImageViewerWithDatasource:imageDatasource initialIndex:initialIndex withImageArray:nil andDefaultImage:nil onOpen:open onClose:close];
+}
+
+- (void)setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource initialIndex:(NSInteger)initialIndex withImageArray:(NSArray *)urlArray andDefaultImage:(UIImage *)defaultImage onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
+
     self.userInteractionEnabled = YES;
     MHFacebookImageViewerTapGestureRecognizer *tapGesture = [[MHFacebookImageViewerTapGestureRecognizer alloc] initWithTarget:self action:@selector(didTap:)];
     tapGesture.imageDatasource = imageDatasource;
     tapGesture.openingBlock = open;
     tapGesture.closingBlock = close;
     tapGesture.initialIndex = initialIndex;
+    tapGesture.defaultImage = defaultImage;
+    tapGesture.urlArray = urlArray;
     [self addGestureRecognizer:tapGesture];
     tapGesture = nil;
 }
@@ -72,6 +78,8 @@ static char kImageBrowserKey;
     [[self imageBrowser] setClosingBlock:gestureRecognizer.closingBlock];
     [[self imageBrowser] setImageDatasource:gestureRecognizer.imageDatasource];
     [[self imageBrowser] setInitialIndex:gestureRecognizer.initialIndex];
+    [[self imageBrowser] setUrlArray:gestureRecognizer.urlArray];
+    [[self imageBrowser] setDefaultImage:gestureRecognizer.defaultImage];
 
     if (self.image)
         [self.imageBrowser presentFromRootViewController];
