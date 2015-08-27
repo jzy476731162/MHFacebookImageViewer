@@ -362,26 +362,12 @@ static const CGFloat kMinImageScale = 1.0f;
 #pragma mark - Showing of Done Button if ever Zoom Scale is equal to 1
 - (void)didSingleTap:(UITapGestureRecognizer *)recognizer {
     if (!_doneButton.superview) {
-        if (__scrollView.zoomScale == __scrollView.minimumZoomScale) {
-            if (!_isDoneAnimating) {
-                _isDoneAnimating = YES;
-                [self.viewController.view addSubview:_doneButton];
-                _doneButton.alpha = 0.0f;
-                [UIView animateWithDuration:0.2f
-                    delay:0.0f
-                    options:UIViewAnimationOptionAllowUserInteraction
-                    animations:^{
-                      _doneButton.alpha = 1.0f;
-                    }
-                    completion:^(BOOL finished) {
-                      [self.viewController.view bringSubviewToFront:_doneButton];
-                      _isDoneAnimating = NO;
-                    }];
-            }
-        } else if (__scrollView.zoomScale == __scrollView.maximumZoomScale) {
-            CGPoint pointInView = [recognizer locationInView:__imageView];
-            [self zoomInZoomOut:pointInView];
-        }
+        [self.viewController.view addSubview:_doneButton];
+        _doneButton.alpha = 1.0f;
+        [self.viewController.view bringSubviewToFront:_doneButton];
+    } else if (__scrollView.zoomScale == __scrollView.maximumZoomScale) {
+        CGPoint pointInView = [recognizer locationInView:__imageView];
+        [self zoomInZoomOut:pointInView];
     }
 }
 
@@ -545,6 +531,9 @@ static const CGFloat kMinImageScale = 1.0f;
     [_doneButton setImageEdgeInsets:UIEdgeInsetsMake(-10, -10, -10, -10)]; // make click area bigger
     [_doneButton setImage:[UIImage imageNamed:@"Done"] forState:UIControlStateNormal];
     _doneButton.frame = CGRectMake(windowBounds.size.width - (51.0f + 9.0f), 15.0f, 51.0f, 26.0f);
+    [self.view addSubview:_doneButton];
+    _doneButton.alpha = 1.0f;
+    [self.view bringSubviewToFront:_doneButton];
 }
 
 #pragma mark - Show
