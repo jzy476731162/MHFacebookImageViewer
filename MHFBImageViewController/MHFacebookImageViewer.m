@@ -198,8 +198,7 @@ static const CGFloat kMinImageScale = 1.0f;
         if (_senderView.alpha != 1.0f)
             _senderView.alpha = 1.0f;
     }
-    // Hide the Done Button
-    [self hideDoneButton];
+
     __scrollView.bounces = NO;
     CGSize windowSize = _blackMask.bounds.size;
     CGPoint currentPoint = [panGesture translationInView:__scrollView];
@@ -243,7 +242,6 @@ static const CGFloat kMinImageScale = 1.0f;
 - (void)dismissViewController {
     _isAnimating = YES;
     dispatch_async(dispatch_get_main_queue(), ^{
-      [self hideDoneButton];
       __imageView.clipsToBounds = YES;
       CGFloat screenHeight = [[UIScreen mainScreen] bounds].size.height;
       CGFloat imageYCenterPosition = __imageView.frame.origin.y + __imageView.frame.size.height / 2;
@@ -323,7 +321,6 @@ static const CGFloat kMinImageScale = 1.0f;
 
 - (void)scrollViewDidZoom:(UIScrollView *)scrollView {
     _isAnimating = YES;
-    [self hideDoneButton];
     [self centerScrollViewContents];
 }
 
@@ -364,9 +361,7 @@ static const CGFloat kMinImageScale = 1.0f;
 
 #pragma mark - Showing of Done Button if ever Zoom Scale is equal to 1
 - (void)didSingleTap:(UITapGestureRecognizer *)recognizer {
-    if (_doneButton.superview) {
-        [self hideDoneButton];
-    } else {
+    if (!_doneButton.superview) {
         if (__scrollView.zoomScale == __scrollView.minimumZoomScale) {
             if (!_isDoneAnimating) {
                 _isDoneAnimating = YES;
@@ -407,26 +402,6 @@ static const CGFloat kMinImageScale = 1.0f;
     CGFloat y = point.y - (h / 2.0f);
     CGRect rectToZoomTo = CGRectMake(x, y, w, h);
     [__scrollView zoomToRect:rectToZoomTo animated:YES];
-}
-
-#pragma mark - Hide the Done Button
-- (void)hideDoneButton {
-    if (!_isDoneAnimating) {
-        if (_doneButton.superview) {
-            _isDoneAnimating = YES;
-            _doneButton.alpha = 1.0f;
-            [UIView animateWithDuration:0.2f
-                delay:0.0f
-                options:UIViewAnimationOptionAllowUserInteraction
-                animations:^{
-                  _doneButton.alpha = 0.0f;
-                }
-                completion:^(BOOL finished) {
-                  _isDoneAnimating = NO;
-                  [_doneButton removeFromSuperview];
-                }];
-        }
-    }
 }
 
 - (void)close:(UIButton *)sender {
