@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = 'MHFacebookImageViewer'
-  s.version = '1.1'
+  s.version = '1.1.1'
   s.summary = 'A new Image Viewer inspired by Facebook.'
   s.homepage = 'https://github.com/michaelhenry/MHFacebookImageViewer'
   s.author = 'Michael Henry Pantaleon', 'michaelhenry119@yahoo.com.ph'
@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.resources    = 'MHFBImageViewController/Resources/*.png'
   s.frameworks = 'UIKit', 'QuartzCore'
   s.requires_arc = true
-  s.dependency     'AFNetworking', '~> 2.5'
+  s.dependency     'AFNetworking', '~> 2.6'
   s.license      = {
     :type => 'MIT',
     :text => <<-LICENSE
