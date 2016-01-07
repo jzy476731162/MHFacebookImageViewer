@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.resources    = 'MHFBImageViewController/Resources/*.png'
   s.frameworks = 'UIKit', 'QuartzCore'
   s.requires_arc = true
-  s.dependency     'AFNetworking', '~> 2.6'
+  s.dependency     {:git => 'https://github.com/AFNetworking/AFNetworking.git', :branch => 'master'}
   s.license      = {
     :type => 'MIT',
     :text => <<-LICENSE
