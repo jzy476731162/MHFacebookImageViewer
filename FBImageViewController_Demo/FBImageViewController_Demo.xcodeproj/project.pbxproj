@@ -352,6 +352,7 @@
 		998724E51757AFFD004FDBC5 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastTestingUpgradeCheck = 0730;
 				LastUpgradeCheck = 0460;
 				ORGANIZATIONNAME = "Michael Henry Pantaleon";
 			};
