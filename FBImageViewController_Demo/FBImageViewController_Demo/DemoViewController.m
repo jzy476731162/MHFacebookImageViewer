@@ -94,7 +94,8 @@
 }
 
 -  (NSURL*) imageURLAtIndex:(NSInteger)index imageViewer:(MHFacebookImageViewer *)imageViewer {
-    return [NSURL URLWithString:[NSString stringWithFormat:@"http://iamkel.net/projects/mhfacebookimageviewer/%i.png",index]];
+    NSArray *imageList = @[@"https://gss0.baidu.com/-fo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/0df431adcbef76090d00880024dda3cc7cd99e21.jpg",@"https://gss0.baidu.com/9vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/3c6d55fbb2fb431664416be52aa4462308f7d3d6.jpg",@"https://gss0.baidu.com/-vo3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/64380cd7912397dd9c05899b5382b2b7d0a28734.jpg"];
+    return [NSURL URLWithString:[NSString stringWithFormat:@"%@", imageList[arc4random()%3]]];
 }
 
 - (UIImage*) imageDefaultAtIndex:(NSInteger)index imageViewer:(MHFacebookImageViewer *)imageViewer{

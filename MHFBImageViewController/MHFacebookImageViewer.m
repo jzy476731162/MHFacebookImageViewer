@@ -29,6 +29,8 @@ static const CGFloat kMinBlackMaskAlpha = 0.3f;
 static const CGFloat kMaxImageScale = 2.5f;
 static const CGFloat kMinImageScale = 1.0f;
 
+static const CGFloat kAnimatedDuration = 0.2f;
+
 @interface MHFacebookImageViewerCell : UITableViewCell <UIGestureRecognizerDelegate, UIScrollViewDelegate> {
     UIImageView *__imageView;
     UIScrollView *__scrollView;
@@ -124,7 +126,7 @@ static const CGFloat kMinImageScale = 1.0f;
 
     if (_imageIndex == _initialIndex && !_isLoaded) {
         __imageView.frame = _originalFrameRelativeToScreen;
-        [UIView animateWithDuration:0.4f
+        [UIView animateWithDuration:kAnimatedDuration
             delay:0.0f
             options:0
             animations:^{
@@ -208,7 +210,7 @@ static const CGFloat kMinImageScale = 1.0f;
 
     __imageView.frame = frame;
 
-    CGFloat yDiff = fabsf((y + __imageView.frame.size.height / 2) - windowSize.height / 2);
+    CGFloat yDiff = fabs((y + __imageView.frame.size.height/1.5) - windowSize.height / 2);
     _blackMask.alpha = MAX(1 - yDiff / (windowSize.height / 0.5), kMinBlackMaskAlpha);
 
     if ((panGesture.state == UIGestureRecognizerStateEnded || panGesture.state == UIGestureRecognizerStateCancelled) && __scrollView.zoomScale == 1.0f) {
@@ -224,7 +226,7 @@ static const CGFloat kMinImageScale = 1.0f;
 #pragma mark - Just Rollback
 - (void)rollbackViewController {
     _isAnimating = YES;
-    [UIView animateWithDuration:0.4f
+    [UIView animateWithDuration:kAnimatedDuration
         delay:0.0f
         options:0
         animations:^{
@@ -361,14 +363,19 @@ static const CGFloat kMinImageScale = 1.0f;
 
 #pragma mark - Showing of Done Button if ever Zoom Scale is equal to 1
 - (void)didSingleTap:(UITapGestureRecognizer *)recognizer {
-    if (!_doneButton.superview) {
-        [self.viewController.view addSubview:_doneButton];
-        _doneButton.alpha = 1.0f;
-        [self.viewController.view bringSubviewToFront:_doneButton];
-    } else if (__scrollView.zoomScale == __scrollView.maximumZoomScale) {
+    if (__scrollView.zoomScale != kMinImageScale) {
         CGPoint pointInView = [recognizer locationInView:__imageView];
         [self zoomInZoomOut:pointInView];
     }
+    [self close:nil];
+//    if (!_doneButton.superview) {
+//        [self.viewController.view addSubview:_doneButton];
+//        _doneButton.alpha = 1.0f;
+//        [self.viewController.view bringSubviewToFront:_doneButton];
+//    } else if (__scrollView.zoomScale == __scrollView.maximumZoomScale) {
+//        CGPoint pointInView = [recognizer locationInView:__imageView];
+//        [self zoomInZoomOut:pointInView];
+//    }
 }
 
 #pragma mark - Zoom in or Zoom out
@@ -527,13 +534,7 @@ static const CGFloat kMinImageScale = 1.0f;
     _blackMask.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     [self.view insertSubview:_blackMask atIndex:0];
 
-    _doneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [_doneButton setImageEdgeInsets:UIEdgeInsetsMake(-10, -10, -10, -10)]; // make click area bigger
-    [_doneButton setImage:[UIImage imageNamed:@"Done"] forState:UIControlStateNormal];
-    _doneButton.frame = CGRectMake(windowBounds.size.width - (51.0f + 9.0f), 15.0f, 51.0f, 26.0f);
-    [self.view addSubview:_doneButton];
-    _doneButton.alpha = 1.0f;
-    [self.view bringSubviewToFront:_doneButton];
+
 }
 
 #pragma mark - Show

@@ -74,6 +74,7 @@
     imageView.contentMode = UIViewContentModeScaleAspectFill;
     [imageView setupImageViewer];
     imageView.clipsToBounds = YES;
+    
 }
 
 @end

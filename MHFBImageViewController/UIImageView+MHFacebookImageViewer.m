@@ -38,6 +38,7 @@ static char kImageBrowserKey;
     tapGesture.imageURL = url;
     tapGesture.openingBlock = open;
     tapGesture.closingBlock = close;
+    tapGesture.defaultImage = self.image;
     [self addGestureRecognizer:tapGesture];
     tapGesture = nil;
 }
