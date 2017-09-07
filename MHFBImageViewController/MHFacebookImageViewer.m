@@ -528,6 +528,12 @@ static const CGFloat kAnimatedDuration = 0.2f;
     [_tableView setShowsVerticalScrollIndicator:NO];
     [_tableView setContentOffset:CGPointMake(0, _initialIndex * windowBounds.size.width)];
 
+    if (@available(iOS 11.0, *)) {
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    } else {
+        // Fallback on earlier versions
+    }
+    
     _blackMask = [[UIView alloc] initWithFrame:windowBounds];
     _blackMask.backgroundColor = [UIColor blackColor];
     _blackMask.alpha = 0.0f;
