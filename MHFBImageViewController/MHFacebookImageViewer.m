@@ -133,7 +133,7 @@ static const CGFloat kAnimatedDuration = 0.2f;
               __imageView.frame = [self centerFrameFromImage:__imageView.image];
               CGAffineTransform transf = CGAffineTransformIdentity;
               _rootViewController.view.transform = CGAffineTransformScale(transf, 0.95f, 0.95f);
-              _blackMask.alpha = 1;
+              _blackMask.alpha = 0.9f;
             }
             completion:^(BOOL finished) {
               if (finished) {
@@ -210,12 +210,15 @@ static const CGFloat kAnimatedDuration = 0.2f;
 
     __imageView.frame = frame;
 
-    CGFloat yDiff = fabs((y + __imageView.frame.size.height/1.5) - windowSize.height / 2);
-    _blackMask.alpha = MAX(1 - yDiff / (windowSize.height / 0.5), kMinBlackMaskAlpha);
+    CGFloat yDiff = (y + __imageView.frame.size.height/1.5) - windowSize.height / 2;
+    if (yDiff < 0) {
+        yDiff = -0.1f;
+    }
+    _blackMask.alpha = MAX(0.9 - yDiff / (windowSize.height / 0.5), kMinBlackMaskAlpha);
 
     if ((panGesture.state == UIGestureRecognizerStateEnded || panGesture.state == UIGestureRecognizerStateCancelled) && __scrollView.zoomScale == 1.0f) {
 
-        if (_blackMask.alpha < 0.85f) {
+        if (_blackMask.alpha < 0.7f) {
             [self dismissViewController];
         } else {
             [self rollbackViewController];
@@ -231,7 +234,7 @@ static const CGFloat kAnimatedDuration = 0.2f;
         options:0
         animations:^{
           __imageView.frame = [self centerFrameFromImage:__imageView.image];
-          _blackMask.alpha = 1;
+          _blackMask.alpha = 0.9f;
         }
         completion:^(BOOL finished) {
           if (finished) {
