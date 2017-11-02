@@ -133,7 +133,9 @@ static const CGFloat kAnimatedDuration = 0.2f;
               __imageView.frame = [self centerFrameFromImage:__imageView.image];
               CGAffineTransform transf = CGAffineTransformIdentity;
               _rootViewController.view.transform = CGAffineTransformScale(transf, 0.95f, 0.95f);
-              _blackMask.alpha = 0.9f;
+              _blackMask.alpha = 0.85f;
+                // TODO: sd
+                
             }
             completion:^(BOOL finished) {
               if (finished) {
@@ -202,6 +204,9 @@ static const CGFloat kAnimatedDuration = 0.2f;
     }
 
     __scrollView.bounces = NO;
+    __scrollView.alwaysBounceVertical = NO;
+    __scrollView.alwaysBounceHorizontal = NO;
+    
     CGSize windowSize = _blackMask.bounds.size;
     CGPoint currentPoint = [panGesture translationInView:__scrollView];
     CGFloat y = currentPoint.y + _panOrigin.y;
@@ -215,9 +220,13 @@ static const CGFloat kAnimatedDuration = 0.2f;
         yDiff = -0.1f;
     }
     _blackMask.alpha = MAX(0.9 - yDiff / (windowSize.height / 0.5), kMinBlackMaskAlpha);
+    NSLog(@"%f", _blackMask.alpha);
 
+//    CGFloat yDiff = fabs((y + __imageView.frame.size.height/1.5) - windowSize.height / 2);
+//    _blackMask.alpha = MAX(1 - yDiff / (windowSize.height / 0.5), kMinBlackMaskAlpha);
+    
     if ((panGesture.state == UIGestureRecognizerStateEnded || panGesture.state == UIGestureRecognizerStateCancelled) && __scrollView.zoomScale == 1.0f) {
-
+//0.85f
         if (_blackMask.alpha < 0.7f) {
             [self dismissViewController];
         } else {
@@ -234,7 +243,8 @@ static const CGFloat kAnimatedDuration = 0.2f;
         options:0
         animations:^{
           __imageView.frame = [self centerFrameFromImage:__imageView.image];
-          _blackMask.alpha = 0.9f;
+          _blackMask.alpha = 0.85f;
+            // TODO: 1
         }
         completion:^(BOOL finished) {
           if (finished) {
@@ -263,18 +273,18 @@ static const CGFloat kAnimatedDuration = 0.2f;
             CGAffineTransform transf = CGAffineTransformIdentity;
             _rootViewController.view.transform = CGAffineTransformScale(transf, 1.0f, 1.0f);
             _blackMask.alpha = 0.0f;
+                         }
+                         completion:^(BOOL finished) {
+                             if (finished) {
+                                 [_viewController.view removeFromSuperview];
+                                 [_viewController removeFromParentViewController];
+                                 _senderView.alpha = 1.0f;
+                                 [UIApplication sharedApplication].statusBarHidden = NO;
+                                 [UIApplication sharedApplication].statusBarStyle = _statusBarStyle;
+                                 _isAnimating = NO;
+                                 if (_closingBlock)
+                                     _closingBlock();
           }
-          completion:^(BOOL finished) {
-            if (finished) {
-                [_viewController.view removeFromSuperview];
-                [_viewController removeFromParentViewController];
-                _senderView.alpha = 1.0f;
-                [UIApplication sharedApplication].statusBarHidden = NO;
-                [UIApplication sharedApplication].statusBarStyle = _statusBarStyle;
-                _isAnimating = NO;
-                if (_closingBlock)
-                    _closingBlock();
-            }
           }];
     });
 }
@@ -286,9 +296,9 @@ static const CGFloat kAnimatedDuration = 0.2f;
 
     CGRect windowBounds = _rootViewController.view.bounds;
     CGSize newImageSize = [self imageResizeBaseOnWidth:windowBounds
-                                                           .size.width
+.size.width
                                               oldWidth:image
-                                                           .size.width
+.size.width
                                              oldHeight:image.size.height];
     // Just fit it on the size of the screen
     newImageSize.height = MIN(windowBounds.size.height, newImageSize.height);
@@ -557,6 +567,12 @@ static const CGFloat kAnimatedDuration = 0.2f;
     [[[[UIApplication sharedApplication] windows] objectAtIndex:0] addSubview:self.view];
     [controller addChildViewController:self];
     [self didMoveToParentViewController:controller];
+    if (_initialIndex > 0) {
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [_tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:_initialIndex inSection:0] atScrollPosition:UITableViewScrollPositionNone animated:NO];
+        });
+        
+    }
 }
 
 - (void)dealloc {

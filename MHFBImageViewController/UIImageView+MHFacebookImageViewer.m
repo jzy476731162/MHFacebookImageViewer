@@ -55,6 +55,10 @@ static char kImageBrowserKey;
     [self setupImageViewerWithDatasource:imageDatasource initialIndex:initialIndex withImageArray:nil andDefaultImage:nil onOpen:open onClose:close];
 }
 
+- (void)setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource initialIndex:(NSInteger)initialIndex DefaultImage:(UIImage *)defaultImage onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
+    [self setupImageViewerWithDatasource:imageDatasource initialIndex:initialIndex withImageArray:nil andDefaultImage:defaultImage onOpen:open onClose:close];
+}
+
 - (void)setupImageViewerWithDatasource:(id<MHFacebookImageViewerDatasource>)imageDatasource initialIndex:(NSInteger)initialIndex withImageArray:(NSArray *)urlArray andDefaultImage:(UIImage *)defaultImage onOpen:(MHFacebookImageViewerOpeningBlock)open onClose:(MHFacebookImageViewerClosingBlock)close {
 
     self.userInteractionEnabled = YES;
